@@ -1,5 +1,7 @@
 # IEC-104 Attacks
 
+This repository contains attacks against the IEC-104 protocol, which is often used in European electrical engineering and power system automation applications. We created Docker containers to help test the attacks, which have all the necessary tools prepared. This `README.md` guides you on how to reproduce each attack scenario for yourself. The theoretical background of the attacks is explained in our paper` Novel specific attack methods against the IEC 104 protocol`, which is yet to be published.
+
 ## Unauthorized access
 
 1. Start the containers using `docker-compose build && docker-compose up`
