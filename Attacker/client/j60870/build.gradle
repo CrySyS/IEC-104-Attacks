@@ -17,6 +17,10 @@ plugins {
 apply plugin: "org.asciidoctor.convert"
 apply from: "configuration.gradle"
 
+asciidoctorj {
+  groovyDslVersion = '2.0.2'
+}
+
 asciidoctor {
   backends = ["pdf", "html5"]
   attributes    "stylesheet": "openmuc-asciidoc.css",
