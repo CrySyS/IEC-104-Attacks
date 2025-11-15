@@ -1,0 +1,121 @@
+
+project.ext {
+
+  cfgVersion = "1.3.0"
+  
+  cfgGroup = "org.openmuc"
+
+  cfgCopyDependencies = false
+
+  cfgCopyToRoot = false
+
+  cfgSignPom = true
+
+  cfgRepository = project.properties.sonatypeRepository
+
+  cfgSnapshotRepository = project.properties.sonatypeSnapshotRepository
+
+  cfgRepositoryUser = project.properties.sonatypeUser
+
+  cfgRepositoryPass = project.properties.sonatypePass
+
+  javaProjects = allprojects
+
+  distributionProjects = javaProjects
+
+  docProjects = javaProjects
+
+  repositoryProjects = javaProjects
+}
+
+tasks.withType(Tar) {
+
+  into(project.name) {
+    from("./") {
+      include "build.gradle"
+      include "configuration.gradle"
+      include "license/**"
+      include "doc/CHANGELOG.txt"
+      include "run-scripts/**"
+      include "gradle/wrapper/**"
+      include "gradlew"
+      include "gradlew.bat"
+      include "build/libs/**"
+      include "src/**"
+      include "cli-app/**"
+    }
+
+    if (name.equals("tar") ){
+      exclude "**/dependencies/**/src"
+      exclude "**/.project"
+      exclude "**/.classpath"
+      exclude "**/.gradle"
+      exclude "**/.settings"
+      exclude "**/bin"
+    }
+
+    from("./build/") {
+      include "settings.gradle"
+    }
+  }
+
+  into(project.name + "/doc/user-guide/") {
+    from("./build/asciidoc/html5/") {
+      include "**"
+    }
+    from("./build/asciidoc/pdf/") {
+      include "*.pdf"
+    }
+  }
+
+  into(project.name + "/doc/") {
+    from("./build/docs/") {
+      include "javadoc/**"
+    }
+  }
+
+}
+
+
+//------------------project specific configurations--------------------
+
+apply plugin: "java"
+apply plugin: "eclipse"
+apply plugin: "osgi"
+apply plugin: "maven"
+apply plugin: "signing"
+
+
+jar {
+  manifest {
+    name = "j60870"
+    instruction "Export-Package", "!org.openmuc.j60870.internal.internal.*,*"
+  }
+}
+
+dependencies {
+  testCompile group: "org.powermock", name: "powermock-module-junit4", version: "1.6.4"
+  testCompile group: "org.powermock", name: "powermock-api-mockito", version: "1.6.4"
+  testCompile group: "pl.pragmatists", name: "JUnitParams", version: "1.1.0"
+  testCompile group: "org.awaitility", name: "awaitility-proxy", version: "3.1.3"
+}
+
+uploadArchives {
+  repositories {
+    mavenDeployer {
+      pom.project {
+        name "j60870"
+        description "j60870 is an IEC 60870-5-104 client and server library."
+        
+        licenses {
+          license {
+            name "GNU General Public License"
+            url "http://www.gnu.org/copyleft/gpl-3.0.html"
+            distribution "repo"
+          }
+        }
+        
+      }
+    }
+  }
+}
